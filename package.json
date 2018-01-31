@@ -7,6 +7,8 @@
     "test": "test"
   },
   "scripts": {
+    "start": "nodemon ./bin/www",
+    "apidoc": "./node_modules/.bin/apidoc -i app/controller/ -o public/apidoc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,5 +23,21 @@
   "bugs": {
     "url": "https://github.com/samy-onyx/koa-seed/issues"
   },
-  "homepage": "https://github.com/samy-onyx/koa-seed#readme"
+  "homepage": "https://github.com/samy-onyx/koa-seed#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "bunyan": "^1.8.12",
+    "koa": "^2.4.1",
+    "koa-body": "^2.5.0",
+    "koa-jwt": "^3.3.0",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.8.1",
+    "koa-static": "^4.0.2",
+    "moment": "^2.20.1",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.6",
+    "koa-json": "^2.0.2"
+  }
 }
