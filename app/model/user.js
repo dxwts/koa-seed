@@ -1,20 +1,46 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
-//用户的表结构
-// module.exports = new mongoose.Schema({
+const ObjectId = mongoose.Schema.Types.ObjectId
+
 const schema = new mongoose.Schema({
-
-    //用户名
     username: String,
-    //密码
-    password: String,
-    //是否是管理员
-    isAdmin: {
-        type: Boolean,
-        default: false
+    password: {
+        String,
+        required: [false, '用户密码'],
+    },
+    email:{
+        String,
+        required: [true, 'email field is required'],
+    },
+    meta: {
+        createAt: {
+            type: Date,
+            default: Date.now()
+        },
+        updateAt: {
+            type: Date,
+            default: Date.now()
+        }
     }
-
 });
-// const model = mongoose.model('users', schema);
-const model = mongoose.model('User', schema);
-module.exports = model;
+
+schema.pre('save', function(next) {
+    if (this.isNew) {
+        this.meta.createAt = this.meta.updateAt = Date.now()
+    } else {
+        this.meta.updateAt = Date.now()
+    }
+    next()
+});
+
+schema.statics = {
+    fetch: function(cb) {
+        return this
+            .find({})
+            .sort('meta.updateAt')
+            .exec(cb)
+    }
+};
+
+
+export default mongoose.model('user', schema)
