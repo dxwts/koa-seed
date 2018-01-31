@@ -1,0 +1,25 @@
+{
+  "name": "koa-seed",
+  "version": "0.0.1",
+  "description": "koa seed",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samy-onyx/koa-seed.git"
+  },
+  "keywords": [
+    "koa"
+  ],
+  "author": "samyzhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samy-onyx/koa-seed/issues"
+  },
+  "homepage": "https://github.com/samy-onyx/koa-seed#readme"
+}
