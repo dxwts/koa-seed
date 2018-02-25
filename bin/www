@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import app from '../app'
+const app = require('../app')
+const config = require('../config')
 
-app.set('port', process.env.PORT || 3002);
-
-var server = app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + server.address().port);
+const port = config[process.env.NODE_ENV || 'development']['port']
+let server = app.listen(port, function() {
+    console.log('server listening on port ' + server.address().port);
 });

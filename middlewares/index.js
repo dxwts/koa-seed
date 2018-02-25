@@ -1,6 +1,6 @@
-import bytes from 'bytes'
-import logger from '../app/utils/logger'
-import uuid from 'uuid'
+const bytes = require('bytes')
+const logger = require('../lib/logger')
+const uuid = require('uuid')
 
 module.exports = {
     requestUuid: async(ctx, next) => {
@@ -65,9 +65,14 @@ module.exports = {
                     message = JSON.stringify(err.message);
                 }
             }
-            ctx.body = { err: { code, msg: message }, out: {} };
+            ctx.body = { 
+                code:code,
+                msg:message,
+                data:{}
+            };
         }
     },
+
     fixRequestBody: async(ctx, next) => { // 尝试将字符串值的字段转化为JSON对象
         if (ctx.method == "POST" && ctx.header["Content-Type"] !== 'application/json') {
             let rbody = ctx.request.body;
@@ -81,7 +86,6 @@ module.exports = {
         }
         await next();
     },
-
     defaultHandler: async(ctx, next) => { // 默认处理方式
         await next();
         if (ctx.path == '/') { // 根目录访问处理

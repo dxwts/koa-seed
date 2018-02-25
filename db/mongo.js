@@ -1,6 +1,6 @@
-import bluebird from 'bluebird'
-import mongoose from 'mongoose'
-import mongoomise from 'mongoomise'
+const bluebird = require('bluebird')
+const mongoose = require('mongoose')
+const mongoomise = require('mongoomise')
 
 class Mongo {
     constructor(app, config) {
@@ -14,7 +14,7 @@ class Mongo {
 
     init() {
         this.env = this.app.get('env')
-        this.dblink = this.config['mongo'][this.env]['connectionString']
+        this.dblink = this.config[process.env.NODE_ENV || 'development']['db'];
 
         const opts = {
             server: {

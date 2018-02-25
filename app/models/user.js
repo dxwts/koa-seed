@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = required('mongoose')
 
 const ObjectId = mongoose.Schema.Types.ObjectId
 

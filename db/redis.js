@@ -1,8 +1,10 @@
-import redis from 'redis'
-import config from '../config'
+// const redis = require('redis')
+const redis = require('ioredis')
+const config = require('../config')
 
-const redisLink = config['redis'][process.env.NODE_ENV || 'development']['connectionString']
-const redisClient = redis.createClient(redisLink)
+const redisLink = config[process.env.NODE_ENV || 'development']['redis']
+// const redisClient = redis.createClient(redisLink)
+const redisClient = config.redis;
 
 redisClient
     .on('error', err => console.log('------ Redis connection failed ------' + err))
