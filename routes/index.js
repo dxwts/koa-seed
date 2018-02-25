@@ -1,10 +1,7 @@
 "use strict"
 
-const Router = require('koa-router');
-const router = new Router();
+const router = require('koa-router')();
 
-// const logger = require('../libs/logger');
-// const common = require('../libs/common');
-// const models = require('../models');
+const help = require('../app/controllers/help')
 
 module.exports = router;

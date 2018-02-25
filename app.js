@@ -7,7 +7,9 @@ const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
 const parser = require('koa-body');
 const serve = require('koa-static');
-const render = require('koa-ejs');
+// const render = require('koa-ejs');
+// const render = require('art-template');
+const render = require('koa-art-template');
 const logger = require('koa-logger')
 const path = require('path');
 
@@ -15,6 +17,7 @@ const config = require('./config');
 const utils = require('./lib/utils');
 const middlewares = require('./middlewares');
 const load = require('./lib/load');
+const mongo = require('./db/mongo');
 
 const app = new Koa();
 app.use(middlewares.requestUuid);
@@ -33,6 +36,9 @@ app.use(session({
         keySchema: config.sessionKey
     })
 }, app));
+new mongo();
+
+// app.use(middlewares.authControl);
 
 app.use(serve(__dirname + '/public', {
     setHeaders: function(res) {
@@ -44,9 +50,7 @@ app.use(serve(__dirname + '/public', {
 
 render(app, {
     root: path.join(__dirname, 'app/views'),
-    layout: 'template',
-    viewExt: 'html',
-    cache: false,
+    extname: '.htm',
     debug: !utils.isProduction()
 });
 

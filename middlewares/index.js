@@ -34,11 +34,10 @@ module.exports = {
                 user_agent: ctx.req.headers["user-agent"],
                 content_type: ctx.req.headers["content-type"],
                 body: ctx.request.body,
-                // res_content_length: ctx.response.header["content-length"],
                 res_content_type: ctx.response.header["content-type"],
-                // res_last_modified: ctx.response.header["last-modified"],
                 res_status_code: ctx.res.statusCode,
-                res_body: ctx.body
+                res_body: ctx.body,
+                res_ip: ctx.ip,
             };
             ctx.log.info(reqInfo, "请求信息");
         }
