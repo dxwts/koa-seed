@@ -39,11 +39,14 @@ class RestBase {
         const skip = (page - 1) * limit
         const sort = options.sort || { create_at: -1 }
 
-        return this.model.find(query, fields, {
-            skip: skip,
-            limit: limit,
-            sort: sort,
-        })
+        console.log('-----getAll--->');
+
+        return this.model.find(query)
+        // return this.model.find(query, fields, {
+        //     skip: skip,
+        //     limit: limit,
+        //     sort: sort,
+        // })
     }
 
     /**
@@ -67,8 +70,6 @@ class RestBase {
         body.update_at = Date.now()
         options.upsert = !0
         options.new = !0
-            //findByIdAndUpdate：根据ID查找并更新
-            //findOneAndUpdate：根据查询条件查找并更新
         return this.model.findOneAndUpdate(query, body, options)
     }
 
@@ -83,6 +84,4 @@ class RestBase {
         return this.model.findOneAndRemove(query, options)
     }
 }
-
-// export default RestBase
 module.exports = RestBase

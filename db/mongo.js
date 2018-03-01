@@ -18,20 +18,20 @@ class Mongo {
         const opts = {
             server: {
                 socketOptions: {
-                    keepAlive: 1
-                }
-            }
+                  socketTimeoutMS: 0,
+                  keepAlive: true
+                },
+                reconnectTries: 3
+              },
         }
 
         mongoose
             .connect(this.dblink, opts)
-            .connection
-            .on('error', err => console.log('------ Mongodb connection failed ------' + err))
-            .on('open', () => console.log('------ Mongodb connection succeed ------'))
-
+            .then(
+                () => { console.log('------ Mongodb connection succeed ------') },
+                err => { console.log('------ Mongodb connection failed ------' + err) }
+            );
         mongoose.Promise = global.Promise;
     }
 }
-
-// export default Mongo
 module.exports = Mongo

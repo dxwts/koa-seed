@@ -12,11 +12,11 @@ const serve = require('koa-static');
 const render = require('koa-art-template');
 const logger = require('koa-logger')
 const path = require('path');
+const router = require('koa-router')();
 
 const config = require('./config');
 const utils = require('./lib/utils');
 const middlewares = require('./middlewares');
-const load = require('./lib/load');
 const mongo = require('./db/mongo');
 
 const app = new Koa();
@@ -27,7 +27,7 @@ app.use(middlewares.errorHandler);
 app.keys = config.name;
 app.use(session({
     key: config.cookieKey,
-    maxAge: 30 * 24 * 60 * 60 * 1000, // cookie的过期时间为1个月
+    maxAge: 30 * 24 * 60 * 60 * 1000,
     rolling: false,
     store: redisStore({
         host: config.redisSession.host,
@@ -65,9 +65,11 @@ if (utils.isProduction()) {
     app.use(logger());
 }
 
-app.use(middlewares.fixRequestBody);
-app.use(middlewares.defaultHandler);
-// app.use(middlewares.checkParams);
-load(app, __dirname + '/routes');
+app.use(middlewares.fixRequestBody)
+app.use(middlewares.defaultHandler)
+// app.use(middlewares.checkParams)
+
+require('./routes')(router);
+app.use(router.routes()).use(router.allowedMethods())
 
 module.exports = app;

@@ -1,8 +1,17 @@
 const bytes = require('bytes')
-const logger = require('../lib/logger')
 const uuid = require('uuid')
 
+// const paginate = require('../app/common/paginate')
+const tools = require('../app/common/tools')
+const logger = require('../lib/logger')
+
 module.exports = {
+    bodyJson: async(ctx, next) => {
+        // res.paginate = (...args) => new paginate(...args).init()
+        ctx.bodyJson = new tools(ctx.body)
+        await next();
+    },
+    
     requestUuid: async(ctx, next) => {
         ctx.req_id = uuid.v1(); //Version 1 (timestamp)
         ctx.log = logger.child({ reqId: ctx.req_id });
@@ -39,7 +48,7 @@ module.exports = {
                 res_body: ctx.body,
                 res_ip: ctx.ip,
             };
-            ctx.log.info(reqInfo, "请求信息");
+            ctx.log.info(reqInfo, "------请求信息------->");
         }
     },
     
@@ -64,11 +73,7 @@ module.exports = {
                     message = JSON.stringify(err.message);
                 }
             }
-            ctx.body = { 
-                code:code,
-                msg:message,
-                data:{}
-            };
+            tools.setJson(code,message,data);
         }
     },
 

@@ -1,11 +1,12 @@
 
-const proxy = require('../proxy')
 const Promise = require('bluebird')
+const proxy = require('../proxy')
+const retTool = require('../common/ret_tool')
 
 class Ctrl {
-    constructor(app) {
+    constructor(router) {
         Object.assign(this, {
-            app,
+            router,
             model: proxy.help,
         })
         this.init()
@@ -21,11 +22,11 @@ class Ctrl {
      * CRUD 增查改删
      */
     routes() {
-        this.app.get('/help', this.getAll.bind(this))
-        this.app.get('/help/:id', this.get.bind(this))
-        this.app.post('/help', this.post.bind(this))
-        this.app.put('/help/:id', this.put.bind(this))
-        this.app.delete('/help/:id', this.delete.bind(this))
+        this.router.get('/help', this.getAll.bind(this))
+        this.router.get('/help/:id', this.get.bind(this))
+        this.router.post('/help', this.post.bind(this))
+        this.router.put('/help/:id', this.put.bind(this))
+        this.router.delete('/help/:id', this.delete.bind(this))
     }
 
     //api公共类Header Success
@@ -35,9 +36,6 @@ class Ctrl {
      */
 
     /**
-     * //meta 状态描述
-     * //{Number} meta.code 标识码，0表示成功，1表示失败
-     *
      * @apiDefine Success
      * @apiSuccess {Number} code 标识码，0表示成功，1表示失败
      * @apiSuccess {String} msg 标识信息
@@ -47,9 +45,11 @@ class Ctrl {
 
     /**
      * @api {get} /help 列出所有资源
-     * @apiDescription 列出所有资源
+     * @apiDescription 作者：samyzhang
      * @apiName getAll
      * @apiGroup help
+     * 
+     * @apiVersion 0.0.1
      *
      * @apiParam {String} [page=1] 指定第几页
      * @apiParam {String} [limit=10] 指定每页的记录数
@@ -74,27 +74,36 @@ class Ctrl {
      *       }]
      *     }
      */
-    getAll(req, res, next) {
+    getAll(ctx, next) {
         const query = {}
 
         const fields = {}
 
         const options = {
-            page: req.query.page,
-            limit: req.query.limit,
+            page: ctx.query.page,
+            limit: ctx.query.limit,
         }
+        console.log('-----getAll---options---->', JSON.stringify(options))
+        // Promise.all([
+        //         // this.model.count(query),
+        //         this.model.getAll(query, fields, options),
+        //     ])
+        //     .then(docs => {
+        //         console.log('---docs----->' + JSON.stringify(docs));
+        //        return ctx.body = retTool.retJson(0, '调用成功', docs[0])
+        //     })
+        //     // .catch(err => next(err))
+        //     .catch(err => {
+        //        console.log('---err----->' + JSON.stringify(err));
+        //     })
 
-        Promise.all([
-                this.model.countAsync(query), //查总数
-                this.model.getAll(query, fields, options), //查详细的数组
-            ])
-            .then(docs => {
-                res.tools.setJson(0, '调用成功', {
-                    items: docs[1],
-                    paginate: res.paginate(Number(options.page), Number(options.limit), docs[0]), // docs[0]总数量
-                })
-            })
-            .catch(err => next(err))
+        // let data = await model.getAll(query, fields, options)
+        // if (data) {
+        //     ctx.body = retTool.retJson(0, '调用成功', data)
+        // } else {
+        //     ctx.throw("该商品不存在:", 200); return;
+        // }
+        ctx.body = retTool.retJson(0, '调用成功', 'help调用测试')
     }
 
     /**
@@ -125,17 +134,17 @@ class Ctrl {
      *       }
      *     }
      */
-    get(req, res, next) {
+    get(ctx, next) {
         const query = {
-            _id: req.params.id
+            _id: ctx.params.id
         }
 
         const fields = {}
 
         this.model.get(query, fields)
             .then(doc => {
-                if (!doc) return res.tools.setJson(1, '资源不存在或已删除')
-                return res.tools.setJson(0, '调用成功', doc)
+                if (!doc) return ctx.body = retTool.retJson(1, '资源不存在或已删除')
+                return ctx.body = retTool.retJson(0, '调用成功', doc)
             })
             .catch(err => next(err))
     }
@@ -165,14 +174,14 @@ class Ctrl {
      *       }
      *     }
      */
-    post(req, res, next) {
+    post(ctx, next) {
         const body = {
-            title: req.body.title,
-            content: req.body.content,
+            title: ctx.request.body.title,
+            content: ctx.request.body.content,
         }
 
         this.model.post(body)
-            .then(doc => res.tools.setJson(0, '新增成功', { _id: doc._id }))
+            .then(doc => ctx.body = retTool.retJson(0, '新增成功', { _id: doc._id }))
             .catch(err => next(err))
     }
 
@@ -206,20 +215,20 @@ class Ctrl {
      *       }
      *     }
      */
-    put(req, res, next) {
+    put(ctx, next) {
         const query = {
-            _id: req.params.id
+            _id: ctx.params.id
         }
 
         const body = {
-            title: req.body.title,
-            content: req.body.content,
+            title: ctx.request.body.title,
+            content: ctx.request.body.content,
         }
 
         this.model.put(query, body)
             .then(doc => {
-                if (!doc) return res.tools.setJson(1, '资源不存在或已删除')
-                return res.tools.setJson(0, '更新成功', doc)
+                if (!doc) return ctx.body = retTool.retJson(1, '资源不存在或已删除')
+                return ctx.body = retTool.retJson(0, '更新成功', doc)
             })
             .catch(err => next(err))
     }
@@ -246,14 +255,14 @@ class Ctrl {
      *       "data": null
      *     }
      */
-    delete(req, res, next) {
+    delete(ctx, next) {
         const query = {
-            _id: req.params.id
+            _id: ctx.params.id
         }
         this.model.delete(query)
             .then(doc => {
-                if (!doc) return res.tools.setJson(1, '资源不存在或已删除')
-                return res.tools.setJson(0, '删除成功')
+                if (!doc) return ctx.body = retTool.retJson(1, '资源不存在或已删除')
+                return ctx.body = retTool.retJson(0, '删除成功')
             })
             .catch(err => next(err))
     }
