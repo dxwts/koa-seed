@@ -1,16 +1,16 @@
 
+const proxy = require('../proxy')
+const Promise = require('bluebird')
+
 class Ctrl {
     constructor(app) {
         Object.assign(this, {
             app,
-            // model: proxy.help,
+            model: proxy.help,
         })
         this.init()
     }
 
-    /**
-     * 初始化
-     */
     init() {
         this.routes()
     }
@@ -21,11 +21,11 @@ class Ctrl {
      * CRUD 增查改删
      */
     routes() {
-        this.app.get('/api/help', this.getAll.bind(this))
-        this.app.get('/api/help/:id', this.get.bind(this))
-        this.app.post('/api/help', this.post.bind(this))
-        this.app.put('/api/help/:id', this.put.bind(this))
-        this.app.delete('/api/help/:id', this.delete.bind(this))
+        this.app.get('/help', this.getAll.bind(this))
+        this.app.get('/help/:id', this.get.bind(this))
+        this.app.post('/help', this.post.bind(this))
+        this.app.put('/help/:id', this.put.bind(this))
+        this.app.delete('/help/:id', this.delete.bind(this))
     }
 
     //api公共类Header Success
