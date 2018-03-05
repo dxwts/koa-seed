@@ -1,7 +1,6 @@
 
 const Promise = require('bluebird')
 const proxy = require('../proxy')
-const retTool = require('../common/ret_tool')
 
 class Ctrl {
     constructor(router) {
@@ -74,36 +73,21 @@ class Ctrl {
      *       }]
      *     }
      */
-    getAll(ctx, next) {
+    //  getAll(ctx, next) {
+    async getAll(ctx, next) {
         const query = {}
-
         const fields = {}
-
+        
         const options = {
             page: ctx.query.page,
             limit: ctx.query.limit,
         }
-        console.log('-----getAll---options---->', JSON.stringify(options))
-        // Promise.all([
-        //         // this.model.count(query),
-        //         this.model.getAll(query, fields, options),
-        //     ])
-        //     .then(docs => {
-        //         console.log('---docs----->' + JSON.stringify(docs));
-        //        return ctx.body = retTool.retJson(0, '调用成功', docs[0])
-        //     })
-        //     // .catch(err => next(err))
-        //     .catch(err => {
-        //        console.log('---err----->' + JSON.stringify(err));
-        //     })
-
-        // let data = await model.getAll(query, fields, options)
-        // if (data) {
-        //     ctx.body = retTool.retJson(0, '调用成功', data)
-        // } else {
-        //     ctx.throw("该商品不存在:", 200); return;
-        // }
-        ctx.body = retTool.retJson(0, '调用成功', 'help调用测试')
+        let data = await this.model.getAll(query, fields, options)
+        if (data) {
+            ctx.util.resBody(ctx, 0, '调用成功', data)
+        } else {
+            ctx.throw("该商品不存在:", 200); return;
+        }
     }
 
     /**

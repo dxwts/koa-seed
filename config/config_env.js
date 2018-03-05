@@ -1,5 +1,9 @@
+const path = require('path')
+const rootPath = path.normalize(__dirname + '/..')
+const {appName} = require('./constant');
+
 let env = process.env.NODE_ENV || 'development';
-const appName = 'koa-seed';
+
 let config = {
     development: {
         root: rootPath,

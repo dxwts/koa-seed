@@ -13,7 +13,7 @@ class Mongo {
     }
 
     init() {
-        this.dblink = config[process.env.NODE_ENV || 'development']['db'];
+        this.dblink = config.config.db;
 
         const opts = {
             server: {

@@ -38,7 +38,7 @@ app.use(session({
 }, app));
 new mongo();
 
-// app.use(middlewares.authControl);
+app.use(middlewares.resMid);
 
 app.use(serve(__dirname + '/public', {
     setHeaders: function(res) {
@@ -67,7 +67,6 @@ if (utils.isProduction()) {
 
 app.use(middlewares.fixRequestBody)
 app.use(middlewares.defaultHandler)
-// app.use(middlewares.checkParams)
 
 require('./routes')(router);
 app.use(router.routes()).use(router.allowedMethods())

@@ -13,9 +13,7 @@ class Paginate {
         })
     }
 
-    /**
-     * init
-     */
+
     init() {
         if (!this.page || this.page < 1) {
             this.page = 1
@@ -47,33 +45,25 @@ class Paginate {
         }
     }
 
-    /**
-     * 是否有上一页
-     */
+
     hasPrev() {
         if (this.page > 1) return !0
         return !1
     }
 
-    /**
-     * 上一页
-     */
+
     prev() {
         if (this.page <= 1) return 1
         return this.page - 1
     }
 
-    /**
-     * 是否有下一页
-     */
+
     hasNext() {
         if (this.page < this.pages) return !0
         return !1
     }
 
-    /**
-     * 下一页
-     */
+
     next() {
         if (this.page < this.pages) return this.page + 1
         return this.pages

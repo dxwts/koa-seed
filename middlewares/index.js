@@ -1,17 +1,14 @@
 const bytes = require('bytes')
 const uuid = require('uuid')
 
-// const paginate = require('../app/common/paginate')
-const tools = require('../app/common/tools')
+const midTool = require('../app/common/mid_tool')
 const logger = require('../lib/logger')
 
 module.exports = {
-    bodyJson: async(ctx, next) => {
-        // res.paginate = (...args) => new paginate(...args).init()
-        ctx.bodyJson = new tools(ctx.body)
-        await next();
+    resMid: async(ctx, next) => {
+        ctx.util = midTool
+        return next()
     },
-    
     requestUuid: async(ctx, next) => {
         ctx.req_id = uuid.v1(); //Version 1 (timestamp)
         ctx.log = logger.child({ reqId: ctx.req_id });
@@ -51,7 +48,7 @@ module.exports = {
             ctx.log.info(reqInfo, "------请求信息------->");
         }
     },
-    
+
     errorHandler: async(ctx, next) => { // 错误处理中间件
         try {
             await next();
@@ -73,7 +70,7 @@ module.exports = {
                     message = JSON.stringify(err.message);
                 }
             }
-            tools.setJson(code,message,data);
+            ctx.util.resBody(ctx,code, message, {});
         }
     },
 
@@ -90,14 +87,14 @@ module.exports = {
         }
         await next();
     },
-    defaultHandler: async(ctx, next) => { // 默认处理方式
+    defaultHandler: async(ctx, next) => {
         await next();
-        if (ctx.path == '/') { // 根目录访问处理
+        if (ctx.path == '/') {
             ctx.body = "Welcome to root";
-        } else if (ctx.path == '/favicon.ico') {　 // 网站默认图标处理
+        } else if (ctx.path == '/favicon.ico') {
             ctx.body = "";
         } else {
-            if (ctx.body === undefined) {　 // 非法路由处理
+            if (ctx.body === undefined) {
                 await ctx.render('web/404');
             }
         }
