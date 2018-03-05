@@ -1,0 +1,30 @@
+{
+    "name": "KOA",
+    "version": "0.1.0",
+    "description": "API接口文档",
+    "title": "Frame",
+    "url": "api",
+    "apidoc": {
+        "title": "API接口文档",
+        "url": "http://127.0.0.1:3002/api/v1"
+    },
+    "sampleUrl": "http://127.0.0.1:3002/api",
+    "template": {
+        "withCompare": true,
+        "withGenerator": true
+    },
+    "header": {
+        "title": "My own header title",
+        "filename": "api_header.md"
+
+    },
+    "footer": {
+        "title": "My own footer title",
+        "filename": "api_footer.md"
+    },
+    "order": [
+        "common",
+        "user",
+        "help"
+    ]
+}
